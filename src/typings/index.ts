@@ -11,7 +11,12 @@ export interface IQuestion {
 export interface ITest {
   id: string;
   title: string;
-  questions: string[];
+  questions: {
+    question: string;
+    options: string[];
+    answer: string;
+    difficulty: number;
+  }[];
   url: string;
   description?: string;
   createdAt?: Date;
@@ -42,3 +47,49 @@ export interface IUserTest {
 }
 
 export type Option = { label: string; value: string | number };
+
+export interface ApiResponse<T> {
+  message: string;
+  data: T;
+  nextCursor?: number;
+}
+
+export interface ILoginData {
+  email: string;
+  password: string;
+}
+
+export interface ISignupData extends ILoginData {
+  name: string;
+}
+
+export type Question = IQuestion & { selected: string };
+
+export type FormFields = {
+  title: string;
+  description: string;
+  questions: Question[] | string[];
+};
+
+export interface TestEditorProps {
+  title: string;
+  questions?: Partial<IQuestion[]>;
+  data?: Partial<ITest>;
+  isPending: boolean;
+  onSave: (data: Partial<FormFields>) => void;
+  fetchMoreQuestions: () => void;
+  hasMoreQuestions: boolean;
+}
+
+export interface ITestData extends Omit<ITest, "questions"> {
+  question: Omit<IQuestion, "answer">;
+}
+
+export interface INextQuestion {
+  shouldEndTest: boolean;
+  nextQuestion: Omit<IQuestion, "answer">;
+}
+
+export interface ISubmitAnswerData {
+  answer: string;
+}

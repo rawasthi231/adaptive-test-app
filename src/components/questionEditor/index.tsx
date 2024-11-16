@@ -35,7 +35,6 @@ const QuestionEditor = ({
     getValues,
     handleSubmit,
     reset,
-    watch,
   } = useForm({
     resolver: yupResolver(questionSchema),
   });

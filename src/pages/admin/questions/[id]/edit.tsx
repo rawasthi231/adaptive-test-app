@@ -5,29 +5,24 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useMutation } from "@tanstack/react-query";
 
-import config from "@/config/index";
+import Sidebar from "@/components/sidebar";
 import QuestionEditor from "@/components/questionEditor";
 
-import { IQuestion } from "@/typings";
+import { ApiResponse, IQuestion } from "@/typings";
+import { editQuestion, getQuestion } from "@/services/question";
 
 export default function EditQuestion({ question }: { question: IQuestion }) {
   const router = useRouter();
 
   const { mutate, isPending } = useMutation<
-    Partial<IQuestion>,
+    ApiResponse<Partial<IQuestion>>,
     unknown,
     Partial<IQuestion>
   >({
     mutationFn: (updatedQuestion: Partial<IQuestion>) =>
-      fetch(`${config.baseUrl}/questions/${question.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedQuestion),
-      }).then((res) => res.json()),
+      editQuestion(question.id, updatedQuestion),
     onSuccess: () => {
-      router.push("/questions?refetch=true");
+      router.push("/admin/questions?refetch=true");
     },
     onError: (error) => {
       alert("Error while updating Question" + JSON.stringify(error));
@@ -43,12 +38,16 @@ export default function EditQuestion({ question }: { question: IQuestion }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <QuestionEditor
-        title="Edit Question"
-        isPending={isPending}
-        onSave={mutate}
-        data={question}
-      />
+      <div className="flex h-screen">
+        <Sidebar />
+
+        <QuestionEditor
+          title="Edit Question"
+          isPending={isPending}
+          onSave={mutate}
+          data={question}
+        />
+      </div>
     </>
   );
 }
@@ -56,8 +55,8 @@ export default function EditQuestion({ question }: { question: IQuestion }) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const { params } = context;
-    const res = await fetch(`${config.baseUrl}/questions/${params?.id}`);
-    const question = await res.json();
+
+    const question = await getQuestion(params?.id as string);
 
     return {
       props: {
