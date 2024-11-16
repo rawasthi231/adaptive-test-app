@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add these styles to your global CSS file, e.g., globals.css */
+
+/* Customize the editor container */
+.ql-container {
+  @apply bg-white border border-gray-300 rounded-lg p-4;
+}
+
+/* Style the editor toolbar */
+.ql-toolbar {
+  @apply border-b border-gray-300 rounded-t-lg bg-gray-100 p-2;
+}
+
+/* Style the editor content */
+.ql-editor {
+  @apply min-h-[150px] p-2 text-gray-800;
+  line-height: 1.6;
+}
+
+/* Customize individual buttons (optional) */
+.ql-toolbar .ql-picker-label,
+.ql-toolbar .ql-picker-item {
+  @apply text-gray-600 hover:text-blue-600;
+}
