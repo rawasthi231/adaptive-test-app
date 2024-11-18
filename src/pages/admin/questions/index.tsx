@@ -7,7 +7,6 @@ import { useRouter } from "next/router";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-import config from "@/config/index";
 import View from "@/components/view";
 import Edit from "@/components/edit";
 import Header from "@/components/header";
@@ -97,6 +96,14 @@ export default function Questions({
           {isFetching ? <Loader /> : null}
           <Header title="Questions" />
           <main className="flex-1 overflow-y-auto p-6 bg-gray-100">
+            <div className="flex justify-between items-center mb-6">
+              <button
+                onClick={() => router.push("/admin/questions/create")}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                Create New Question
+              </button>
+            </div>
             {data.map((question, index) => (
               <div
                 key={question.id}

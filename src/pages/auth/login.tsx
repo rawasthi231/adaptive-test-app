@@ -54,6 +54,7 @@ export default function Login() {
               id="email"
               name="email"
               className="w-full h-10 p-1 border border-gray-300 rounded mb-2 focus:outline-none focus:ring focus:ring-blue-300"
+              autoComplete="false"
             />
             {errors.email && errors.email.message ? (
               <InputWrapper.Error message={errors.email?.message.toString()} />
@@ -68,6 +69,7 @@ export default function Login() {
             </InputWrapper.Label>
             <Textbox
               control={control}
+              type="password"
               id="password"
               name="password"
               className="w-full h-10 p-1 border border-gray-300 rounded mb-2 focus:outline-none focus:ring focus:ring-blue-300"

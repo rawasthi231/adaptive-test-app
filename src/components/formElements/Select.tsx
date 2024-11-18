@@ -21,6 +21,9 @@ export default function Select<T extends FieldValues>({
       control={control}
       render={({ field }) => (
         <select {...props} value={field.value} onChange={field.onChange}>
+          <option value="" selected>
+            -- Select --
+          </option>
           {options.map((data) => (
             <option key={data.value} value={data.value}>
               {data.label}

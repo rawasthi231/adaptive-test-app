@@ -18,7 +18,10 @@ export const editTest = (id: string, data: Partial<ITest>) =>
 export const deleteTest = (id: string) => del<undefined, ITest>(`/tests/${id}`);
 
 export const getTestByUrl = (url: string) =>
-  get<undefined, ITest>(`/tests/${url}`);
+  get<undefined, ITest>(`/tests/${url}/url`);
+
+export const getUserTests = () =>
+  get<undefined, ITest>(`/tests/user/attempted`);
 
 export const startTest = (testId: string) =>
   post<undefined, ITestData>(`/tests/${testId}/start`);

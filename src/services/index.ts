@@ -2,10 +2,7 @@ import config from "@/config";
 
 import { ApiResponse } from "@/typings";
 
-const headers = {
-  "Content-Type": "application/json",
-  Accept: "application/json",
-};
+const isBrowser = typeof window !== "undefined";
 
 /**
  * This TypeScript function defines an API request handler that supports various HTTP methods and
@@ -45,7 +42,8 @@ const api =
     const requestConfig: RequestInit = {
       method,
       headers: {
-        ...headers,
+        "Content-Type": "application/json",
+        Accept: "application/json",
       },
       credentials: "include",
       ...extraConfig,
@@ -63,6 +61,13 @@ const api =
       if (res.status === 401) {
         // window.location.href = "/login?sessionExpired=true";
         return;
+      }
+      const authToken = res.headers.get("Authorization");
+      if (authToken) {
+        document.cookie = `authToken=${authToken}; path=/;`;
+        if (isBrowser) {
+          localStorage.setItem("Authorization", authToken);
+        }
       }
 
       return res.json();

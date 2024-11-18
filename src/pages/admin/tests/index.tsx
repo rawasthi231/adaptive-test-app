@@ -1,9 +1,9 @@
 import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
 
 import Head from "next/head";
 
 import React, { useEffect } from "react";
-import { useRouter } from "next/router";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 
@@ -91,6 +91,14 @@ export default function Tests({
           {isFetching ? <Loader /> : null}
           <Header title="Tests" />
           <main className="flex-1 overflow-y-auto p-6 bg-gray-100">
+            <div className="flex justify-between items-center mb-6">
+              <button
+                onClick={() => router.push("/admin/tests/create")}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                Create New Test
+              </button>
+            </div>
             {data.map((test, index) => (
               <div
                 key={test.id}

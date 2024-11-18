@@ -59,7 +59,7 @@ export default function Test({ data }: { data: ITest }) {
             <Button
               onClick={(e) => {
                 e.stopPropagation();
-                router.push(`/test/${data.id}/edit`);
+                router.push(`/admin/tests/${data.id}/edit`);
               }}
               className="float-right mr-5"
             >
@@ -77,9 +77,7 @@ export default function Test({ data }: { data: ITest }) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const { params } = context;
-
     const test = await getTest(params?.id as string);
-
     return {
       props: {
         data: test.data,

@@ -29,6 +29,7 @@ const TestEditor = ({
     control,
     formState: { errors },
     handleSubmit,
+    reset,
   } = useForm({
     resolver: yupResolver(testSchema),
   });
@@ -37,6 +38,19 @@ const TestEditor = ({
     control,
     name: "questions",
   });
+
+  useEffect(() => {
+    if (data) {
+      reset({
+        title: data.title,
+        description: data.description,
+        // questions: data?.questions?.map((question) => ({
+        //   id: question,
+        //   selected: "true",
+        // })),
+      });
+    }
+  }, []);
 
   useEffect(() => {
     if (questions) {
@@ -50,7 +64,7 @@ const TestEditor = ({
         })
       );
     }
-  }, []);
+  }, [questions]);
 
   useEffect(() => {
     if (!element || typeof window === "undefined") return;
@@ -128,48 +142,45 @@ const TestEditor = ({
 
           <div className="h-64 overflow-y-auto p-4">
             {fields.map((question, index) => (
-              <>
-                <CheckboxWrapper
-                  key={`${question.options}-${index}`}
-                  className="mb-2"
+              <CheckboxWrapper
+                key={`${question.question}-${index}`}
+                className="mb-2"
+              >
+                <CheckboxWrapper.Label
+                  className="inline-flex items-center"
+                  htmlFor={`questions.${index}.selected`}
                 >
-                  <CheckboxWrapper.Label
-                    className="inline-flex items-center"
-                    htmlFor={`questions.${index}.selected`}
-                  >
-                    <Checkbox
-                      className="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                      control={control}
-                      id={`questions.${index}.selected`}
-                      name={`questions.${index}.selected`}
-                      value={question.id}
-                    />
-                    <span className="ml-2 text-gray-700">
-                      {question.question}
-                    </span>
-                  </CheckboxWrapper.Label>
-                  <div className="p-4 rounded-lg shadow-md">
-                    <p>
-                      <strong>Answer:</strong> {question.answer}
-                    </p>
-                    <p>
-                      <strong>Difficulty:</strong> {question.difficulty}
-                    </p>
-                  </div>
-                  <Options options={question.options as string[]} />
-                  
-                </CheckboxWrapper>
-                {hasMoreQuestions && fields.length ? (
-                  <div
-                    ref={
-                      setElement as unknown as React.LegacyRef<HTMLParagraphElement>
-                    }
-                  >
-                    Loading...
-                  </div>
-                ) : null}
-              </>
+                  <Checkbox
+                    className="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                    control={control}
+                    id={`questions.${index}.selected`}
+                    name={`questions.${index}.selected`}
+                    value={question.id}
+                  />
+                  <span className="ml-2 text-gray-700">
+                    {question.question}
+                  </span>
+                </CheckboxWrapper.Label>
+                <div className="p-4 rounded-lg shadow-md">
+                  <p>
+                    <strong>Answer:</strong> {question.answer}
+                  </p>
+                  <p>
+                    <strong>Difficulty:</strong> {question.difficulty}
+                  </p>
+                </div>
+                <Options options={question.options as string[]} />
+              </CheckboxWrapper>
             ))}
+            {hasMoreQuestions && fields.length ? (
+              <div
+                ref={
+                  setElement as unknown as React.LegacyRef<HTMLParagraphElement>
+                }
+              >
+                Loading...
+              </div>
+            ) : null}
           </div>
 
           <Button

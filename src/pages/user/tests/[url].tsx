@@ -81,6 +81,10 @@ export default function Test({ test }: { test: ITest }) {
         <div className="flex-1 flex flex-col">
           <Header title={test.title} />
           <div className="p-8 bg-white rounded-lg shadow-lg mt-5">
+            <p className="mb-2">
+              <strong>Description: </strong>
+              {test.description}
+            </p>
             {!hasStarted ? (
               <div className="flex justify-center">
                 <Button

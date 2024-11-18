@@ -6,6 +6,9 @@ export const getAllQuestions = ({ pageParam }: { pageParam: number }) =>
     skip: pageParam,
   });
 
+export const createQuestion = (data: Partial<IQuestion>) =>
+  post<Partial<IQuestion>, IQuestion>("/questions", data);
+
 export const getQuestion = (id: string) =>
   get<undefined, IQuestion>(`/questions/${id}`);
 

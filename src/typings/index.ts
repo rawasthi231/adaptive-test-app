@@ -46,6 +46,15 @@ export interface IUserTest {
   updatedAt?: Date;
 }
 
+export interface IUserTestSubmission {
+  id: string;
+  user_test_id: string;
+  question_id: string;
+  answer: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
 export type Option = { label: string; value: string | number };
 
 export interface ApiResponse<T> {
@@ -92,4 +101,12 @@ export interface INextQuestion {
 
 export interface ISubmitAnswerData {
   answer: string;
+}
+
+export interface IUserTests extends IUserTest {
+  test: ITest;
+  questions: IQuestion[];
+  submittedAnswers: IUserTestSubmission[];
+  correctCount: number;
+  wrongCount: number;
 }

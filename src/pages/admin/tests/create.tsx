@@ -12,14 +12,14 @@ import { ApiResponse, IQuestion, ITest } from "@/typings";
 import { getAllQuestions } from "@/services/question";
 import { createTest } from "@/services/test";
 
-export default function EditTest({
+export default function CreateTest({
   initialQuestions,
 }: {
   initialQuestions: ApiResponse<IQuestion[]>;
 }) {
   const router = useRouter();
 
-  const { data, hasNextPage, fetchNextPage, refetch } = useInfiniteQuery({
+  const { data, hasNextPage, fetchNextPage } = useInfiniteQuery({
     queryKey: ["Questions"],
     queryFn: getAllQuestions,
     initialPageParam: 0,

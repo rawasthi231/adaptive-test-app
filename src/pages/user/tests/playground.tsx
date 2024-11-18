@@ -50,6 +50,11 @@ export default function PlayGround({ data }: { data: ITest }) {
           <div className="p-8 bg-white rounded-lg shadow-lg mt-5">
             <h1 className="text-2xl font-semibold">{data.title}</h1>
 
+            <p className="mb-2">
+              <strong>Description: </strong>
+              {data.description}
+            </p>
+
             <Button
               onClick={(e) => {
                 e.stopPropagation();

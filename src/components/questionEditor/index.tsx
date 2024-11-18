@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -7,12 +7,12 @@ import { useForm } from "react-hook-form";
 import { IQuestion, Option } from "@/typings";
 
 import InputWrapper from "@/components/formElements/InputWrapper";
-import Textarea from "@/components/formElements/Textarea";
+import Textbox from "@/components/formElements/Textbox";
 import Button from "@/components/formElements/Button";
+import Select from "../formElements/Select";
+import Header from "../header";
 
 import { questionSchema } from "@/validation/schema";
-import Header from "../header";
-import Select from "../formElements/Select";
 
 interface QuestionEditorProps {
   title: string;
@@ -32,9 +32,9 @@ const QuestionEditor = ({
   const {
     control,
     formState: { errors },
-    getValues,
     handleSubmit,
     reset,
+    watch,
   } = useForm({
     resolver: yupResolver(questionSchema),
   });
@@ -58,7 +58,7 @@ const QuestionEditor = ({
           </button>
         </div>
 
-        <form onSubmit={handleSubmit(onSave)}>
+        <form onSubmit={handleSubmit((data) => onSave(data as IQuestion))}>
           <InputWrapper className="mb-2">
             <InputWrapper.Label
               htmlFor="question"
@@ -66,7 +66,8 @@ const QuestionEditor = ({
             >
               Question
             </InputWrapper.Label>
-            <Textarea
+            <Textbox
+              type="text"
               control={control}
               id="question"
               name="question"
@@ -78,6 +79,33 @@ const QuestionEditor = ({
               />
             ) : null}
           </InputWrapper>
+          {!data && (
+            <div className="flex flex-wrap -mx-2">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="w-full md:w-1/2 lg:w-1/4 px-2 mb-4">
+                  <InputWrapper>
+                    <InputWrapper.Label
+                      htmlFor={`options.${i}`}
+                      className="block text-gray-700 font-semibold mb-1"
+                    >
+                      Option {i + 1}
+                    </InputWrapper.Label>
+                    <Textbox
+                      control={control}
+                      id={`options.${i}`}
+                      name={`options.${i}`}
+                      className="h-10 p-1 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
+                    />
+                    {errors.options && errors.options[i]?.message ? (
+                      <InputWrapper.Error
+                        message={errors.options[i]?.message.toString()}
+                      />
+                    ) : null}
+                  </InputWrapper>
+                </div>
+              ))}
+            </div>
+          )}
           <InputWrapper className="mb-2">
             <InputWrapper.Label
               htmlFor="answer"
@@ -91,7 +119,12 @@ const QuestionEditor = ({
               name="answer"
               className="w-full h-10 p-1 border border-gray-300 rounded mb-2 focus:outline-none focus:ring focus:ring-blue-300"
               options={
-                data?.options?.map((opt) => ({
+                (data
+                  ? data?.options
+                  : watch("options")
+                  ? watch("options")?.filter((ele) => !!ele)
+                  : []
+                )?.map((opt) => ({
                   label: opt,
                   value: opt,
                 })) as Array<Option>

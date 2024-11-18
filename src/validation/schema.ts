@@ -4,6 +4,9 @@ export const questionSchema = Yup.object({
   question: Yup.string().required("Question is required"),
   answer: Yup.string().required("Answer is required"),
   difficulty: Yup.number().required("Difficulty is required"),
+  options: Yup.array()
+    .of(Yup.string())
+    .min(4, "At least 4 options are required"),
 });
 
 export const testSchema = Yup.object({
